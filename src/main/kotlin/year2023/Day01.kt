@@ -47,15 +47,10 @@ fun main() {
                     }
                     index++
                 }
-                println { numPos.toString() }
-
                 val first = numPos[numPos.keys.sorted().min()]
                 val last = numPos[numPos.keys.sorted().max()]
                 first.toString() + last.toString()
 
-            }.map { num ->
-                if (num.toLong() < 10) num + num
-                else num.first().toString() + num.last().toString()
             }.map { it.toLong() }
         println { list.toString() }
         return list.sum()
@@ -83,6 +78,4 @@ fun main() {
     ) test Pair(281L, "test 2 part 2")
 
     part2(input) test Pair(54676L, "part 2")
-
-    // not 54678 to high
 }
