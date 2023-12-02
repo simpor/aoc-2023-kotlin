@@ -35,9 +35,6 @@ fun main() {
         return sum
     }
 
-    data class Round(var red: Int = 0, var blue: Int = 0, var green: Int = 0)
-    data class Game2(val game: Int, val rounds: MutableList<Round>)
-
     fun part2(input: String, debug: Boolean = false): Long {
         val games = input.lines().map { line ->
             val split1 = line.split(":")
@@ -51,33 +48,18 @@ fun main() {
                 }
             }
 
-            val game = Game2(gameNum.toInt(), mutableListOf())
-
-            val list = roundMap.map { round ->
-                val r = Round()
-                round.map { pair ->
-                    if (pair.first == "red") r.red = pair.second
-                    if (pair.first == "blue") r.blue = pair.second
-                    if (pair.first == "green") r.green = pair.second
+            val game = Game(gameNum.toInt())
+            roundMap.forEach { round ->
+                round.forEach { pair ->
+                    if (pair.first == "red" && pair.second > game.red) game.red = pair.second
+                    if (pair.first == "blue" && pair.second > game.blue) game.blue = pair.second
+                    if (pair.first == "green" && pair.second > game.green) game.green = pair.second
                 }
-                r
             }
-
-            game.rounds.addAll(list)
-
             game
         }
 
-        val sum = games.map { game ->
-            val result = Round()
-            game.rounds.forEach { round ->
-                if (round.red > result.red) result.red = round.red
-                if (round.green > result.green) result.green = round.green
-                if (round.blue > result.blue) result.blue = round.blue
-            }
-            result
-        }.map { it.blue.toLong() * it.red.toLong() * it.green.toLong() }
-            .sum();
+        val sum = games.map { it.red * it.blue*it.green }.sum().toLong()
 
         return sum
 
@@ -95,5 +77,5 @@ fun main() {
     part1(input) test Pair(2162L, "part 1")
 
     part2(testInput) test Pair(2286L, "test 2 part 2")
-    part2(input) test Pair(0L, "part 2")
+    part2(input) test Pair(72513L, "part 2")
 }
