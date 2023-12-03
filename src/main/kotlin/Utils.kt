@@ -46,8 +46,7 @@ fun <T> Map2d<T>.around(
     Map2dDirection.NW to Point(point.x - 1, point.y - 1),
     Map2dDirection.CENTER to Point(point.x, point.y)
 ).filter { dirs.contains(it.key) }
-    .values
-    .map {
+    .values.mapNotNull {
         if (wrap) {
             if (!this.containsKey(it)) {
                 val maxX = this.keys.maxOf { m -> m.x }
@@ -61,7 +60,10 @@ fun <T> Map2d<T>.around(
                 else if (it.x > maxX) it.copy(x = 0)
                 else TODO()
             } else it
-        } else it
+        } else {
+            if (!this.containsKey(it)) null
+            else it
+        }
     }
     .associateWith { if (defaultValue == null) this[it]!! else this.getOrDefault(it, defaultValue) }
 
